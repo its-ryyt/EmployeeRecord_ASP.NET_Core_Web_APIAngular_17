@@ -28,4 +28,4 @@ jobs:
         run: |
           git add daily-log.txt
           git commit -m "Automated commit: $(date)"
-          git push origin main  # Change 'main' to your default branch if needed
+          git push
