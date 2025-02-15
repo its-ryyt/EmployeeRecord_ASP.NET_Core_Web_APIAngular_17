@@ -7,7 +7,7 @@ on:
     - cron: "0 5 * * *"    # 1:00 PM PHT (5:00 AM UTC)
     - cron: "0 10 * * *"   # 6:00 PM PHT (10:00 AM UTC)
     
-  workflow_dispatch:
+  workflow_dispatch:  # Allows manual triggering
 
 jobs:
   commit:
@@ -17,19 +17,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.PAT_TOKEN }}  # Use the PAT for authentication
+          token: ${{ secrets.PAT_TOKEN }}  # Use a PAT instead of GITHUB_TOKEN for contributions
+
+      - name: Set up Git user
+        run: |
+          git config --global user.name "its-ryyt"
+          git config --global user.email "expanderqwertz@gmail.com"
 
       - name: Update daily log file
         run: |
-          echo "Last commit: $(date)" > daily-log.txt
-
-      - name: Configure Git
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          echo "Last commit: $(date -u +"%Y-%m-%d %H:%M:%S UTC")" > daily-log.txt
 
       - name: Commit and push changes
         run: |
           git add daily-log.txt
-          git commit -m "Automated commit: $(date)"
-          git push
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git commit -m "Automated commit: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
+            git push https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/its-ryyt/EmployeeRecord_ASP.NET-Core-Web-APIAngular-17.git main
+          else
+            echo "No changes to commit"
+          fi
