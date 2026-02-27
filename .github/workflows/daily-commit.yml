@@ -2,12 +2,8 @@ name: Daily Commit
 
 on:
   schedule:
-    - cron: "0 22 * * *"  # 6:00 AM PHT (10:00 PM UTC)
-    - cron: "0 4 * * *"    # 12:00 PM PHT (4:00 AM UTC)
-    - cron: "0 5 * * *"    # 1:00 PM PHT (5:00 AM UTC)
-    - cron: "0 10 * * *"   # 6:00 PM PHT (10:00 AM UTC)
-    
-  workflow_dispatch:  # Allows manual triggering
+    - cron: "0 22 * * 0"  # Sunday 22:00 UTC = Monday 06:00 PHT
+  workflow_dispatch:      # allows manual trigger
 
 jobs:
   commit:
